@@ -56,6 +56,7 @@ class ExtractTranslationCommand extends ContainerAwareCommand
             ->addOption('default-output-format', null, InputOption::VALUE_REQUIRED, 'The default output format (defaults to xliff).')
             ->addOption('keep', null, InputOption::VALUE_NONE, 'Define if the updater service should keep the old translation (defaults to false).')
             ->addOption('external-translations-dir', null, InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED , 'Load external translation ressources')
+            ->addOption('recursive', null, InputOption::VALUE_NONE, 'When specified, all subdirectories of those specified will be included')
         ;
     }
 
@@ -87,6 +88,7 @@ class ExtractTranslationCommand extends ContainerAwareCommand
             $output->writeln(sprintf('Excluded Names: <info>%s</info>', $config->getExcludedNames() ? implode(', ', $config->getExcludedNames()) : '# none #'));
             $output->writeln(sprintf('Output-Format: <info>%s</info>', $config->getOutputFormat() ? $config->getOutputFormat() : '# whatever is present, if nothing then '.$config->getDefaultOutputFormat().' #'));
             $output->writeln(sprintf('Custom Extractors: <info>%s</info>', $config->getEnabledExtractors() ? implode(', ', array_keys($config->getEnabledExtractors())) : '# none #'));
+            $output->writeln(sprintf('Recursive: <info>%s</info>', $config->isRecursive() ? 'Yes' : 'No'));
             $output->writeln('============================================================');
 
             $updater = $this->getContainer()->get('jms_translation.updater');
@@ -194,6 +196,12 @@ class ExtractTranslationCommand extends ContainerAwareCommand
 
         if ($loadResource = $input->getOption('external-translations-dir')) {
             $builder->setLoadResources($loadResource);
+        }
+
+        if ($recursive = $input->getOption('recursive')) {
+            $builder->setRecursive(true);
+        } else {
+            $builder->setRecursive(false);
         }
     }
 }

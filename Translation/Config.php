@@ -43,9 +43,9 @@ final class Config
 
     private $keepOldMessages;
     private $loadResources;
+    private $recursive;
 
-
-    public function __construct($translationsDir, $locale, array $ignoredDomains, array $domains, $outputFormat, $defaultOutputFormat, array $scanDirs, array $excludedDirs, array $excludedNames, array $enabledExtractors, $keepOldMessages, array $loadResources)
+    public function __construct($translationsDir, $locale, array $ignoredDomains, array $domains, $outputFormat, $defaultOutputFormat, array $scanDirs, array $excludedDirs, array $excludedNames, array $enabledExtractors, $keepOldMessages, array $loadResources, $recursive)
     {
         if (empty($translationsDir)) {
             throw new InvalidArgumentException('The directory where translations are must be set.');
@@ -85,6 +85,7 @@ final class Config
         $this->enabledExtractors = $enabledExtractors;
         $this->keepOldMessages = $keepOldMessages;
         $this->loadResources = $loadResources;
+        $this->recursive = $recursive;
     }
 
     /**
@@ -207,5 +208,21 @@ final class Config
     public function getLoadResources()
     {
         return $this->loadResources;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isRecursive()
+    {
+        return $this->recursive;
+    }
+
+    /**
+     * @param boolean
+     */
+    public function setRecursive($recursive)
+    {
+        $this->recursive = $recursive;
     }
 }
